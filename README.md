@@ -144,7 +144,7 @@ rt = pd.merge(left[['symbol', 'close']], right[['symbol', 'close']], right_on='s
 
 
 0221
--mysql 한글설정
+-mysql 한글설정 /putty 가상에서 적용
 cd /etc/my.cnf.d 위치로 먼저 가
 vim mysql-clients.cnf
 
@@ -184,7 +184,7 @@ default-character-set=utf8
 systemctl restart mariadb 
 systemctl status mariadb 
 
--데이터베이스 만들기
+-데이터베이스 만들기 (HeidiSQL 쿼리에서 작성)
 CREATE DATABASE test; 
 
 USE test;
@@ -206,7 +206,7 @@ CREATE TABLE KRX(
     PRIMARY KEY(ISU_SRT_CD)
     );
 
-- 데이터 넣기
+- 데이터 넣기 (파이썬에서 작성)
 import requests 
 import pymysql
 try:
@@ -254,8 +254,8 @@ krx = pd.read_sql_query("""SELECT *
 
 - 'ISU_CD' 쿼리의 1번 인덱스를 가져와줘
 krx.loc[1, 'ISU_CD']
-- 'ISU_CD', 'ISU_NM', 'ISU_SRT_CD'의 1번부터 마지막까지 인덱스를 가져와줘
+- 'ISU_CD', 'ISU_NM', 'ISU_SRT_CD'의 1번부터 마지막까지 인덱스를 가져와줘 (list를 넣어주면 엑셀처럼 데이터 형식으로 나옴)
 krx.loc[1:, ['ISU_CD', 'ISU_NM', 'ISU_SRT_CD']]
-- 데이터 형식?(엑셀형식?)으로 보여줘
+- 0번부터 끝까지 1,2,3번의 쿼리를 가져와줘
 krx.iloc[0:, [1,2,3]]
 
