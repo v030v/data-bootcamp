@@ -124,5 +124,138 @@ cd ~ > mkdir repos(레포 생성) > cd ./repos(현재 /home/git/repos에 있음)
 git init --bare./ (현재 폴더를 저장소에서 초기화)  
 #git 상태 보기 > git status  
 
+stock = pd.read_sql_query("select * from stock_day", con)
 
+왼쪽은 9일 오른쪽은 22일 
+이 두개를 합쳐 merge
+왼쪽, 오른쪽 symbol을 기준으로 inner 조인 해줘
+left = stock[stock.stock_date == pd.to_datetime('2023-02-09')]
+right = stock[stock.stock_date == pd.to_datetime('2023-02-22')]
+rt = pd.merge(left[['symbol', 'close']], right[['symbol', 'close']], right_on='symbol',
+         left_on='symbol', how='inner')
+
+
+
+
+
+
+
+
+
+
+0221
+-mysql 한글설정
+cd /etc/my.cnf.d 위치로 먼저 가
+vim mysql-clients.cnf
+
+----
+i번 누르고 insert 모드 
+
+[mysql]
+default-character-set=utf8
+
+[mysql_upgrade]
+
+[mysqladmin]
+
+[mysqlbinlog]
+
+[mysqlcheck]
+
+[mysqldump]
+default-character-set=utf8
+
+esc 누르고 (visual mode) -> : (명령어) -> wq
+----
+
+vim server.cnf
+
+[server]
+character-set-server = utf8
+collation-server = utf8_general_ci
+init_connect = set names utf8
+
+
+vim client.cnf 
+[client]
+default-character-set=utf8
+
+# 재가동
+systemctl restart mariadb 
+systemctl status mariadb 
+
+-데이터베이스 만들기
+CREATE DATABASE test; 
+
+USE test;
+
+- sql 테이블 만들기
+CREATE TABLE KRX(
+    ISU_CD VARCHAR(200),
+    ISU_SRT_CD VARCHAR(200),
+    ISU_NM VARCHAR(200),
+    ISU_ABBRV VARCHAR(200),
+    ISU_ENG_NM VARCHAR(200),
+    LIST_DD VARCHAR(200),
+    MKT_TP_NM VARCHAR(200),
+    SECUGRP_NM VARCHAR(200),
+    SECT_TP_NM VARCHAR(200),
+    KIND_STKCERT_TP_NM VARCHAR(200),
+    PARVAL VARCHAR(200),
+    LIST_SHRS VARCHAR(200),
+    PRIMARY KEY(ISU_SRT_CD)
+    );
+
+- 데이터 넣기
+import requests 
+import pymysql
+try:
+    con = pymysql.connect(host='192.168.56.101', 
+                          user='encore', password='123', 
+                          charset='utf8', db='test')
+    cur = con.cursor()
+except Exception as e:
+    print ("error ->", e)
+
+- url에서 데이터를 크롤링
+krx_url = "http://data.krx.co.kr/comm/bldAttendant/getJsonData.cmd"
+payload = {"bld"  : "dbms/MDC/STAT/standard/MDCSTAT01901",
+            "locale"  : "ko_KR",
+            "mktId"  : "ALL",
+            "share"  : "1",
+            "csvxls_isNo"  : "false",}
+r = requests.post(krx_url, data=payload)
+
+rt = r.json()
+
+-크롤링한 데이터를 입력해줘
+sql = "INSERT INTO KRX VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+
+for data in rt['OutBlock_1']:
+    try:
+        cur.execute(sql, list(data.values()))
+    except:
+        pass
+
+
+con.commit()
+
+- KRX에서 코스피 코스닥 쿼리를 가져와줘 
+SELECT *  검색해 전부
+FROM KRX
+WHERE MKT_TP_NM IN ('KOSPI', 'KOSDAQ')
+
+-판다스에서 쿼리 가져오기
+import pandas as pd
+
+krx = pd.read_sql_query("""SELECT * 
+                        FROM KRX
+                        WHERE MKT_TP_NM IN ('KOSPI', 'KOSDAQ')""", con)
+
+- 'ISU_CD' 쿼리의 1번 인덱스를 가져와줘
+krx.loc[1, 'ISU_CD']
+- 'ISU_CD', 'ISU_NM', 'ISU_SRT_CD'의 1번부터 마지막까지 인덱스를 가져와줘
+krx.loc[1:, ['ISU_CD', 'ISU_NM', 'ISU_SRT_CD']]
+- 데이터 형식?(엑셀형식?)으로 보여줘
+krx.iloc[0:, [1,2,3]]
 
