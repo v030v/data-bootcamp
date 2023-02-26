@@ -197,9 +197,14 @@ DESC **tablename**;
 SELECT COUNT(*)
 FROM **tablename**;  
   
--쿼리의 데이터 총합과 갯수 구하기
+-컬럼의 데이터 총합과 갯수 구하기
 SELECT SUM(**Quantity**), COUNT(**Quantity**)
-FROM **newjeans**;
+FROM **newjeans**;  
+
+-컬럼의 중복 값 제거  
+SELECT COUNT(*) FROM (SELECT DISTINCT(**InvoiceNo**)
+FROM **newjeans**) AS a ;
+
 
 
 - sql 테이블 만들기
