@@ -5,3 +5,4 @@
 no/
 __pycache__/
 source/
+*.json
