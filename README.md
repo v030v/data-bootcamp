@@ -184,10 +184,28 @@ default-character-set=utf8
 systemctl restart mariadb 
 systemctl status mariadb 
 
+## SQL
 -데이터베이스 만들기 (HeidiSQL 쿼리에서 작성)
 CREATE DATABASE test; 
 
 USE test;
+    
+- table 구조보기
+DESC **tablename**;  
+  
+- table의 데이터 갯수 구하기
+SELECT COUNT(*)
+FROM **tablename**;  
+  
+-컬럼의 데이터 총합과 갯수 구하기
+SELECT SUM(**Quantity**), COUNT(**Quantity**)
+FROM **newjeans**;  
+
+-컬럼의 중복 값 제거  
+SELECT COUNT(*) FROM (SELECT DISTINCT(**InvoiceNo**)
+FROM **newjeans**) AS a ;
+
+
 
 - sql 테이블 만들기
 CREATE TABLE KRX(
