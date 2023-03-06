@@ -2,6 +2,14 @@ CREATE DATABASE test;
 
 USE test;
 
+DESC newjeans;
+
+SELECT COUNT(*) FROM (SELECT DISTINCT(InvoiceNo)
+FROM newjeans) AS a;
+
+SELECT *
+FROM newjeans;
+
 CREATE TABLE KRX(
     ISU_CD VARCHAR(200),
     ISU_SRT_CD VARCHAR(200),
@@ -48,3 +56,4 @@ ON c.ISU_SRT_CD = b.symbol;
 
 
 
+convenience
