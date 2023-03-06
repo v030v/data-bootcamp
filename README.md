@@ -1,24 +1,26 @@
 # data-bootcamp
-0220 day6
-cent os
-# ip 주소확인
-ip addr
+## 0220 day6
+### cent os 명령어  
+- ip 주소확인  
+   * ip addr  
+   
+- cd == change directory == 이동  
+- ls ==파일목록  
 
-cd == change directory
-이동
-ls ==파일목록
+- q! == 강제 종료  
+- : 명령어 모드로 이동  
+- wq 쓰고 나가기  
 
-q! 강제 종료
-: 명령어 모드로 이동
-wq 쓰고 나가기
+*vi ifcfg-enp0s8 -> yes로 변경 (ip주소 관련)*
 
-vi ifcfg-enp0s8  yes로 변경 (나는 지금 3밖에 없음)
+### putty
+- 드래그 == 복사  
+- 마우스 오른쪽 == 붙여넣기  
+- 컨트롤씨 == 인터럽트  
 
 
-
-putty (드래그 == 복사, 마우스 오른쪽 == 붙여넣기, 컨트롤씨 == 인터럽트)
-enp0s8 ip주소 복사(192:~) 후 host name에 붙여넣기 (혹은 타이핑) 후 오픈
-> 허용 > root/패스워드 > ping 8.8.8.8 (구글의 DNS 서버주소)
+  enp0s8 ip주소 복사(192:~) 후 host name에 붙여넣기 (혹은 타이핑) 후 오픈  
+  -> 허용 -> root/패스워드 -> ping 8.8.8.8 (구글의 DNS 서버주소)
 
 아이피 드래그 후 메모장에 복붙
 
